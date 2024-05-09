@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  webapp:
+    build:
+      context: ./MvcShopApp
+      dockerfile: ./Dockerfile
+      args:
+        DD_TRACER: "https://artprodcus3.artifacts.visualstudio.com/A124c910c-3307-4c7f-b5dc-36cb208d4211/a51c4863-3eb4-4c5d-878a-58b41a049e4e/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2RhdGFkb2docS9wcm9qZWN0SWQvYTUxYzQ4NjMtM2ViNC00YzVkLTg3OGEtNThiNDFhMDQ5ZTRlL2J1aWxkSWQvMTU2MDgxL2FydGlmYWN0TmFtZS8yLjQ5LjAtcmVsZWFzZS1hcnRpZmFjdHM1/content?format=file&subPath=%2Fdatadog-dotnet-apm-2.49.0.arm64.tar.gz"
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+      - coupon-django-api
+    platform: linux/arm64
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Database=MvcShopAppDb;Username=postgres;Password=StrongPassword123"
+      CORECLR_ENABLE_PROFILING: "1"
+      CORECLR_PROFILER: "{846F5F1C-F9AE-4B07-969E-05C26BC060D8}"
+      CORECLR_PROFILER_PATH: "/opt/datadog/Datadog.Trace.ClrProfiler.Native.so"
+      DD_DOTNET_TRACER_HOME: "/opt/datadog"
+      DD_TRACE_ENABLED: "true"
+      DD_TRACE_DEBUG: "true"
+      DD_AGENT_HOST: "docker.for.mac.localhost"
+      DD_DYNAMIC_INSTRUMENTATION_ENABLED: "true"
+      DD_GIT_COMMIT_SHA: "b6965936842cab32553543c1abe8a68714956f44"
+      DD_GIT_REPOSITORY_URL: "https://github.com/OmerRaviv/eShopOnContainers.git"
+      
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: MvcShopAppDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: StrongPassword123
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  coupon-django-api:
+    image: ${REGISTRY:-eshop}/coupon-django.api:${PLATFORM:-linux}-${TAG:-latest}
+    expose: 
+      - "8000"
+    build:
+      context: ./Coupon_Django_Site
+      dockerfile: ./Dockerfile
+      args:
+        DD_TRACER: "git+https://github.com/P403n1x87/dd-trace-py.git@chore/span-origin"
+    command: ddtrace-run python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      CORECLR_ENABLE_PROFILING: "1"
+      CORECLR_PROFILER: "{846F5F1C-F9AE-4B07-969E-05C26BC060D8}"
+      CORECLR_PROFILER_PATH: "/opt/datadog/Datadog.Trace.ClrProfiler.Native.so"
+      DD_DOTNET_TRACER_HOME: "/opt/datadog"
+      DD_TRACE_ENABLED: "true"
+      DD_TRACE_DEBUG: "true"
+      DD_AGENT_HOST: "docker.for.mac.localhost"
+      DD_DYNAMIC_INSTRUMENTATION_ENABLED: "true"
+      DD_EXCEPTION_DEBUGGING_ENABLED: "true"
+      DD_LOGS_INJECTION: "true"
+      DD_TRACE_SPAN_ORIGIN_ENABLED: "true"
+      DD_TRACE_SPAN_ORIGIN_ENRICHED: "true"
+      DD_GIT_COMMIT_SHA: "e87ddc7c860feb347be331888286de4a88b9b82d"
+      DD_GIT_REPOSITORY_URL: "https://github.com/weihe-datadog/eShopOnContainers.git"
+      COUPON_DATABASE_URL: postgresql://postgres:StrongPassword123@db:5432/MvcShopAppDb
+volumes:
+  db-data:

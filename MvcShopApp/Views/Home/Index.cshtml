@@ -1,0 +1,36 @@
+﻿@model IEnumerable<MvcShopApp.Models.CatalogItem>
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<h2>Catalog</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th></th> <!-- For Add to Cart button -->
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.Price.ToString("C")</td>
+            <td>@item.Description</td>
+            <td>
+                <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <input type="submit" value="Add to Cart" class="btn btn-primary" />
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
