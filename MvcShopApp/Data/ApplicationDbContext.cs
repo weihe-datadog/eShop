@@ -25,9 +25,9 @@ namespace MvcShopApp.Data
             {
                 CatalogItems.AddRange(new CatalogItem[]
                 {
-                    new CatalogItem { Name = "Laptop", Price = 999.99m, Description = "A powerful laptop for work and play", ImageUrl = "laptop.png" },
-                    new CatalogItem { Name = "Smartphone", Price = 599.99m, Description = "A smartphone with the best camera", ImageUrl = "smartphone.png" },
-                    new CatalogItem { Name = "Headphones", Price = 199.99m, Description = "Noise-cancelling headphones for music lovers", ImageUrl = "headphones.png" }
+                    new CatalogItem { Name = "Laptop", Price = 9.99m, Description = "A powerful laptop for work and play", ImageUrl = "laptop.png" },
+                    new CatalogItem { Name = "Smartphone", Price = 50.99m, Description = "A smartphone with the best camera", ImageUrl = "smartphone.png" },
+                    new CatalogItem { Name = "Headphones", Price = 1.99m, Description = "Noise-cancelling headphones for music lovers", ImageUrl = "headphones.png" }
                 });
 
                 SaveChanges();
@@ -40,6 +40,13 @@ namespace MvcShopApp.Data
                 {
                     Code = "EXAMPLECODE",
                     DiscountType = "percentage",
+                    DiscountValue = 10.00m,
+                    ExpirationDate = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc) // Set DateTime to UTC
+                });
+                Coupons.Add(new Coupon
+                {
+                    Code = "10OFF",
+                    DiscountType = "fixed",
                     DiscountValue = 10.00m,
                     ExpirationDate = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc) // Set DateTime to UTC
                 });

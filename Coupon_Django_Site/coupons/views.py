@@ -63,13 +63,14 @@ def apply_coupon(request):
             item_price = float(item['unit_price'])
             item_units = item['units']
 
+            discount = float(0)
             if coupon.DiscountType == 'percentage':
                 discount = item_price * (float(coupon.DiscountValue) / 100)
-            else:  # discount_type == 'fixed'
+            elif coupon.DiscountType == 'fixed':
                 discount = float(coupon.DiscountValue)
 
             adjusted_units = item_units
-            adjusted_price = max(item_price - discount, 0) 
+            adjusted_price = item_price - discount
             adjusted_item_prices.append({
                 'id': item['id'],
                 'name': item['name'],

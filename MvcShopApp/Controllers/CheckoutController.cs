@@ -3,6 +3,7 @@ using MvcShopApp.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 class ApplyCouponRequest {
     [JsonProperty("coupon_code")]
@@ -74,7 +75,7 @@ namespace MvcShopApp.Controllers
                 BillingAddress = "123 Main St",
                 BillingCity = "Anytown",
                 BillingZip = "12345",
-                CouponCode = "EXAMPLECODE",
+                CouponCode = "10OFF",
                 CartItems = items
             });
         }
@@ -91,6 +92,25 @@ namespace MvcShopApp.Controllers
             };
         }
 
+
+        private void ValidateOrder(List<CartItemViewModel> items) {
+            foreach (var item in items)
+            {
+                if (item.Quantity <= 0)
+                {
+                    throw new Exception("Invalid quantity");
+                }
+                if (item.Price <= 0)
+                {
+                    throw new Exception("Invalid price");
+                }
+                if (string.IsNullOrEmpty(item.ProductName))
+                {
+                    throw new Exception("Invalid product name");
+                }
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Index(CheckoutViewModel model)
         {
@@ -105,19 +125,24 @@ namespace MvcShopApp.Controllers
                     var serializedJson = JsonConvert.SerializeObject(buildApplyCouponRquest(model));
                     var content = new StringContent(serializedJson, Encoding.UTF8, "application/json");
 
-                    try
+                    using var response = await _httpClient.PostAsync("http://coupon-django-api:8000/coupons/apply", content);
+                    if (response.IsSuccessStatusCode)
                     {
-                        using var response = await _httpClient.PostAsync("http://coupon-django-api:8000/coupons/apply", content);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            Console.WriteLine("Coupon applied successfully");
-                        } else {
-                            return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-                        }
-                    } 
-                    catch (Exception)
-                    {
-                        return StatusCode(500, "Internal server error");
+                        var responseBody = await response.Content.ReadAsStringAsync();
+                        var applyCouponResponse = JsonConvert.DeserializeObject<ApplyCouponResponse>(responseBody);
+
+                        var updatedShopCartItems = applyCouponResponse.Items.Select(item => new CartItemViewModel() {
+                            CatalogItemId = int.Parse(item.ProductId),
+                            ProductName = item.Name,
+                            Price = (decimal)item.AdjustedPrice,
+                            Quantity = item.AdjustedUnits
+                        }).ToList();
+
+                        ValidateOrder(updatedShopCartItems);
+                        model.CartItems = updatedShopCartItems;
+                        Console.WriteLine("Coupon applied");
+                    } else {
+                        return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
                     }
                 } 
                 // Process the checkout
