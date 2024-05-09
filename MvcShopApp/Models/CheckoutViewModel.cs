@@ -34,6 +34,18 @@ namespace MvcShopApp.Models
         public string CouponCode { get; set; }
 
         [Required]
-        public string CartItems { get; set; }
+        //public string CartItems { get; set; }
+        public List<CartItemViewModel> CartItems { get; set; }
+    }
+
+    // ViewModel to represent an item in the shopping cart
+    public class CartItemViewModel
+    {
+        // Property to hold the ID of the CatalogItem
+        public int CatalogItemId { get; set; }
+        public int Quantity { get; set; }
+        // Properties to hold the product name and price
+        public string ProductName { get; set; }
+        public decimal Price { get; set; }
     }
 }

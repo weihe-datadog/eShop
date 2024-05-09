@@ -59,8 +59,14 @@ namespace MvcShopApp.Controllers
                 // Redirect to the catalog page if the cart is empty
                 return RedirectToAction("Index", "Home");
             }
-            // ViewBag.CartItems = cartItems;
-            var items = JsonConvert.SerializeObject(cartItems);
+
+            var items = cartItems.DistinctBy(item => item.Id).Select(item => new CartItemViewModel() {
+                CatalogItemId = item.Id,
+                ProductName = item.Name,
+                Price = item.Price,
+                Quantity = cartItems.Count(i => i.Id == item.Id)
+            }).ToList();
+            
             return View(new CheckoutViewModel() {
                 ShippingAddress = "123 Main St",
                 ShippingCity = "Anytown",
@@ -73,17 +79,14 @@ namespace MvcShopApp.Controllers
             });
         }
 
-        private ApplyCouponRequest buildApplyCouponRquest(CheckoutViewModel model) {            
-            var items = JsonConvert.DeserializeObject<List<CatalogItem>>(model.CartItems);
-            var quantityMap = items.GroupBy(item => item.Id).ToDictionary(group => group.Key, group => group.Count());
-            var deduppedItems = items.DistinctBy(id => id.Id).ToList();
+        private ApplyCouponRequest buildApplyCouponRquest(CheckoutViewModel model) {   
             return new ApplyCouponRequest() {
                 CouponCode = model.CouponCode,
-                Items = deduppedItems.Select(item => new Item() {
-                    ProductId = item.Id.ToString(),
-                    ProductName = item.Name,
+                Items = model.CartItems.Select(item => new Item() {
+                    ProductId = item.CatalogItemId.ToString(),
+                    ProductName = item.ProductName,
                     UnitPrice = (float)item.Price,
-                    Units = quantityMap[item.Id]
+                    Units = item.Quantity
                 }).ToArray()
             };
         }
