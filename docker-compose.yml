@@ -23,7 +23,7 @@ services:
       DD_TRACE_DEBUG: "true"
       DD_AGENT_HOST: "docker.for.mac.localhost"
       DD_DYNAMIC_INSTRUMENTATION_ENABLED: "true"
-      DD_GIT_COMMIT_SHA: "8e175fef835cc6db9d1b52d3ba6686baca0d0fa9"
+      DD_GIT_COMMIT_SHA: "d9c642a75a71cc55fa9dd058bd68b93e41859eac"
       DD_GIT_REPOSITORY_URL: "https://github.com/weihe-datadog/eShop.git"
       
   db:
@@ -67,7 +67,7 @@ services:
       DD_LOGS_INJECTION: "true"
       DD_TRACE_SPAN_ORIGIN_ENABLED: "true"
       DD_TRACE_SPAN_ORIGIN_ENRICHED: "true"
-      DD_GIT_COMMIT_SHA: "8e175fef835cc6db9d1b52d3ba6686baca0d0fa9"
+      DD_GIT_COMMIT_SHA: "d9c642a75a71cc55fa9dd058bd68b93e41859eac"
       DD_GIT_REPOSITORY_URL: "https://github.com/weihe-datadog/eShop.git"
       COUPON_DATABASE_URL: postgresql://postgres:StrongPassword123@db:5432/MvcShopAppDb
 volumes:

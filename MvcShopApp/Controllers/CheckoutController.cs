@@ -105,22 +105,6 @@ namespace MvcShopApp.Controllers
                     Console.WriteLine(number);
                 }
             }
-
-            foreach (var item in items)
-            {
-                if (item.Quantity <= 0)
-                {
-                    throw new Exception("Invalid quantity");
-                }
-                if (item.Price <= 0)
-                {
-                    throw new Exception("Price can't be negative");
-                }
-                if (string.IsNullOrEmpty(item.ProductName))
-                {
-                    throw new Exception("Invalid product name");
-                }
-            }
         }
 
         [HttpPost]
