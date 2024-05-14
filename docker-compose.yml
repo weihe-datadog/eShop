@@ -6,7 +6,8 @@ services:
       context: ./MvcShopApp
       dockerfile: ./Dockerfile
       args:
-        DD_TRACER: "https://artprodcus3.artifacts.visualstudio.com/A124c910c-3307-4c7f-b5dc-36cb208d4211/a51c4863-3eb4-4c5d-878a-58b41a049e4e/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2RhdGFkb2docS9wcm9qZWN0SWQvYTUxYzQ4NjMtM2ViNC00YzVkLTg3OGEtNThiNDFhMDQ5ZTRlL2J1aWxkSWQvMTU2MDgxL2FydGlmYWN0TmFtZS8yLjQ5LjAtcmVsZWFzZS1hcnRpZmFjdHM1/content?format=file&subPath=%2Fdatadog-dotnet-apm-2.49.0.arm64.tar.gz"
+        #DD_TRACER: "https://artprodcus3.artifacts.visualstudio.com/A124c910c-3307-4c7f-b5dc-36cb208d4211/a51c4863-3eb4-4c5d-878a-58b41a049e4e/_apis/artifact/cGlwZWxpbmVhcnRpZmFjdDovL2RhdGFkb2docS9wcm9qZWN0SWQvYTUxYzQ4NjMtM2ViNC00YzVkLTg3OGEtNThiNDFhMDQ5ZTRlL2J1aWxkSWQvMTU2MDgxL2FydGlmYWN0TmFtZS8yLjQ5LjAtcmVsZWFzZS1hcnRpZmFjdHM1/content?format=file&subPath=%2Fdatadog-dotnet-apm-2.49.0.arm64.tar.gz" # for span origin
+        DD_TRACER: " https://github.com/DataDog/dd-trace-dotnet/releases/download/v2.51.0/datadog-dotnet-apm-2.51.0.arm64.tar.gz" #for exception replay
     ports:
       - "8080:80"
     depends_on:
@@ -24,6 +25,7 @@ services:
       DD_AGENT_HOST: "docker.for.mac.localhost"
       DD_DYNAMIC_INSTRUMENTATION_ENABLED: "true"
       DD_GIT_COMMIT_SHA: "8e175fef835cc6db9d1b52d3ba6686baca0d0fa9"
+      DD_EXCEPTION_DEBUGGING_ENABLED: "true"
       DD_GIT_REPOSITORY_URL: "https://github.com/weihe-datadog/eShop.git"
       
   db:
