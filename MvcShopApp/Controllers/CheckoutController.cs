@@ -94,6 +94,18 @@ namespace MvcShopApp.Controllers
 
 
         private void ValidateOrder(List<CartItemViewModel> items) {
+            var numbers = new List<int> { 1, 2, 3, 4, 5 };
+            foreach (var number in numbers)
+            {
+                if (number == 1) {
+                    numbers.Add(6); // This will cause an exception
+                } else if (number == 2) {
+                    numbers.Add(7); // This will cause an exception
+                } else {
+                    Console.WriteLine(number);
+                }
+            }
+
             foreach (var item in items)
             {
                 if (item.Quantity <= 0)
@@ -102,7 +114,7 @@ namespace MvcShopApp.Controllers
                 }
                 if (item.Price <= 0)
                 {
-                    throw new Exception("Invalid price");
+                    throw new Exception("Price can't be negative");
                 }
                 if (string.IsNullOrEmpty(item.ProductName))
                 {
