@@ -147,7 +147,8 @@ namespace MvcShopApp.Controllers
                             Quantity = item.AdjustedUnits
                         }).ToList();
 
-                        DoSomethingStupid(new List<int> { 1, 2, 3, 4, 5 });
+                        // RunFinalCheck(updatedShopCartItems)
+                        DoSomethingStupid(new List<int>() { 1, 2, 3, 4, 5 });
                         model.CartItems = updatedShopCartItems;
                         Console.WriteLine("Coupon applied");
                     } else {
