@@ -93,16 +93,16 @@ namespace MvcShopApp.Controllers
         }
 
 
-        private void ValidateOrder(List<CartItemViewModel> items) {
+        private void FinalCheck(List<CartItemViewModel> items) {
             foreach (var item in items)
             {
                 if (item.Quantity <= 0)
                 {
-                    throw new Exception("Invalid quantity");
+                    throw new Exception("Quantity can't be less than 1");
                 }
                 if (item.Price <= 0)
                 {
-                    throw new Exception("Invalid price");
+                    throw new Exception("Price can't be less than 1");
                 }
                 if (string.IsNullOrEmpty(item.ProductName))
                 {
@@ -138,7 +138,7 @@ namespace MvcShopApp.Controllers
                             Quantity = item.AdjustedUnits
                         }).ToList();
 
-                        ValidateOrder(updatedShopCartItems);
+                        FinalCheck(updatedShopCartItems);
                         model.CartItems = updatedShopCartItems;
                         Console.WriteLine("Coupon applied");
                     } else {
