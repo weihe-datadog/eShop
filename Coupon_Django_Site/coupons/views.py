@@ -11,6 +11,16 @@ import psycopg2.extras
 # from .models import Coupon
 import json
 
+import logging
+from ddtrace import tracer
+
+FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+          '[dd.service=%(dd.service)s dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+          '- %(message)s')
+logging.basicConfig(format=FORMAT)
+log = logging.getLogger(__name__)
+log.level = logging.INFO
+
 def index(request):
     return HttpResponse("Hello, world. You're at the coupon index.")
 
@@ -29,6 +39,7 @@ def get_db_connection():
     return conn
 
 @csrf_exempt
+@tracer.wrap()
 def apply_coupon(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -43,7 +54,7 @@ def apply_coupon(request):
         cursor.execute("SELECT \"DiscountType\", \"DiscountValue\", \"ExpirationDate\" FROM public.\"Coupons\" WHERE \"Code\" = %s", (coupon_code,))
         coupon = cursor.fetchone()
 
-        print(f"Coupon: {coupon}")
+        log.info(f"Coupon: {coupon}")
         
         if not coupon:
             raise Http404("Coupon code not found.")
