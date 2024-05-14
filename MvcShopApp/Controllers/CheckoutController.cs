@@ -94,19 +94,12 @@ namespace MvcShopApp.Controllers
 
 
         private void FinalCheck(List<CartItemViewModel> items) {
-            foreach (var item in items)
-            {
-                if (item.Quantity <= 0)
-                {
-                    throw new Exception("Quantity can't be less than 1");
-                }
-                if (item.Price <= 0)
-                {
-                    throw new Exception("Price can't be less than 1");
-                }
-                if (string.IsNullOrEmpty(item.ProductName))
-                {
-                    throw new Exception("Invalid product name");
+            if (items.Count < 5) {
+                var a = 1;
+                var b = 0;
+                if (b * b < 5) {
+                    var c = a / b;
+                    Console.WriteLine(c);
                 }
             }
         }
