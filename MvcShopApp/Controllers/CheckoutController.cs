@@ -92,8 +92,7 @@ namespace MvcShopApp.Controllers
             };
         }
 
-        private void DoSomethingCrazy() {
-            var numbers = new List<int> { 1, 2, 3, 4, 5 };
+        private void DoSomethingStupid(List<int> numbers) {
             foreach (var number in numbers) {
                 if (number % 2 == 0) {
                     //numbers[i] = numbers[i] * 2;
@@ -148,7 +147,7 @@ namespace MvcShopApp.Controllers
                             Quantity = item.AdjustedUnits
                         }).ToList();
 
-                        DoSomethingCrazy();
+                        DoSomethingStupid(new List<int> { 1, 2, 3, 4, 5 });
                         model.CartItems = updatedShopCartItems;
                         Console.WriteLine("Coupon applied");
                     } else {
