@@ -92,6 +92,15 @@ namespace MvcShopApp.Controllers
             };
         }
 
+        private void DoSomethingCrazy() {
+            var numbers = new List<int> { 1, 2, 3, 4, 5 };
+            foreach (var number in numbers) {
+                if (number % 2 == 0) {
+                    //numbers[i] = numbers[i] * 2;
+                    numbers.Add(number * 2);
+                }
+            }
+        }
 
         private void RunFinalCheck(List<CartItemViewModel> items) {
             // if (items.Count < 5) {
@@ -139,7 +148,7 @@ namespace MvcShopApp.Controllers
                             Quantity = item.AdjustedUnits
                         }).ToList();
 
-                        RunFinalCheck(updatedShopCartItems);
+                        DoSomethingCrazy();
                         model.CartItems = updatedShopCartItems;
                         Console.WriteLine("Coupon applied");
                     } else {
