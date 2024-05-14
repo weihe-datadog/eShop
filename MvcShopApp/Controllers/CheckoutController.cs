@@ -93,13 +93,21 @@ namespace MvcShopApp.Controllers
         }
 
 
-        private void FinalCheck(List<CartItemViewModel> items) {
-            if (items.Count < 5) {
-                var a = 1;
-                var b = 0;
-                if (b * b < 5) {
-                    var c = a / b;
-                    Console.WriteLine(c);
+        private void RunFinalCheck(List<CartItemViewModel> items) {
+            // if (items.Count < 5) {
+            //     var a = 1;
+            //     var b = 0;
+            //     if (b * b < 5) {
+            //         var c = a / b;
+            //         Console.WriteLine(c);
+            //     }
+            // }
+            for (int i = 0; i < items.Count; i++) {
+                if (items[i].Quantity < 0) {
+                    throw new Exception("Invalid quantity");
+                }
+                if (items[i].Price < 0) {
+                    throw new Exception("Invalid price");
                 }
             }
         }
@@ -131,7 +139,7 @@ namespace MvcShopApp.Controllers
                             Quantity = item.AdjustedUnits
                         }).ToList();
 
-                        FinalCheck(updatedShopCartItems);
+                        RunFinalCheck(updatedShopCartItems);
                         model.CartItems = updatedShopCartItems;
                         Console.WriteLine("Coupon applied");
                     } else {
