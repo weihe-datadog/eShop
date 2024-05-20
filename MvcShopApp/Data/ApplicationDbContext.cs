@@ -50,6 +50,13 @@ namespace MvcShopApp.Data
                     DiscountValue = 10.00m,
                     ExpirationDate = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc) // Set DateTime to UTC
                 });
+                Coupons.Add(new Coupon
+                {
+                    Code = "10DollarOFF",
+                    DiscountType = "fixed",
+                    DiscountValue = 10.00m,
+                    ExpirationDate = new DateTime(2025, 12, 31, 0, 0, 0, DateTimeKind.Utc) // Set DateTime to UTC
+                });
 
                 SaveChanges();
             }

@@ -75,7 +75,7 @@ namespace MvcShopApp.Controllers
                 BillingAddress = "123 Main St",
                 BillingCity = "Anytown",
                 BillingZip = "12345",
-                CouponCode = "10OFF",
+                CouponCode = "10DollarOFF",
                 CartItems = items
             });
         }
