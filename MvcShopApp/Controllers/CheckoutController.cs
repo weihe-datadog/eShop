@@ -102,7 +102,7 @@ namespace MvcShopApp.Controllers
                 }
                 if (item.Price <= 0)
                 {
-                    throw new Exception("Price can't be less than 1");
+                    throw new Exception("Price can't be less than 0");
                 }
                 if (string.IsNullOrEmpty(item.ProductName))
                 {
